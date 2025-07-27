@@ -61,7 +61,7 @@ The ML model uses the following 10 features:
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/diarrhea-risk-predictor.git
+   git clone https://github.com/Raheesp/Predict-Diarrhea-Risk.git
    cd diarrhea-risk-predictor
    ```
 
