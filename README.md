@@ -131,5 +131,5 @@ The dataset used is derived from:
 
 **Mohammed Rahees P**  
 Final Year B.Tech – AI & Data Science  
-📬 [LinkedIn](https://www.linkedin.com) *(update your link)*
+📬 [LinkedIn](https://www.linkedin.com) 
 
