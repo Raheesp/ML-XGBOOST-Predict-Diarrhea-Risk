@@ -131,6 +131,5 @@ The dataset used is derived from:
 ## 🧑‍💻 Author
 
 **Mohammed Rahees P**  
-Final Year B.Tech – AI & Data Science  
 📬 [LinkedIn](https://www.linkedin.com/in/rahez) 
 
