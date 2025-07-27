@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diarrhea Risk Prediction</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary: #FF6B00;
+      --accent: #1976D2;
+      --bg: #ffffff;
+      --text: #333333;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --heading-color: #000000;  /* Black color for h1 */
+    }
+
+    body.dark-mode {
+      --primary: #FFA726;
+      --accent: #64B5F6;
+      --bg: #1e1e1e;
+      --text: #e0e0e0;
+      --card-bg: rgba(33, 33, 33, 0.85);
+      /* Keep --heading-color as black for both modes */
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("/static/background/image.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text);
+      background-color: var(--bg);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    h1 {
+      color: #000000; /* Force black color for h1 */
+      text-align: center;
+      margin-top: 40px;
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.5;
+      max-width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      color: var(--primary);  /* You can keep other headings dynamic if needed */
+      transition: color 0.3s ease;
+    }
+
+    .container {
+      max-width: 620px;
+      margin: 50px auto;
+      padding: 40px;
+      border-radius: 20px;
+      background: var(--card-bg);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(6px);
+    }
+
+    .form-label {
+      font-weight: 600;
+    }
+
+    .form-select,
+    .form-control {
+      border-radius: 10px;
+      font-size: 15px;
+      padding: 10px;
+    }
+
+    .form-text {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .btn-warning {
+      background-color: var(--primary);
+      border: none;
+      color: white;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-warning:hover {
+      background-color: #e65100;
+    }
+
+    .btn-secondary {
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background-color: #616161;
+    }
+
+    .result {
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      margin-top: 25px;
+    }
+
+    .confidence {
+      text-align: center;
+      font-size: 16px;
+      color: var(--accent);
+    }
+
+    .error {
+      text-align: center;
+      font-weight: bold;
+      color: #f44336;
+    }
+
+    .progress {
+      height: 22px;
+    }
+
+    .progress-bar {
+      font-weight: bold;
+    }
+
+    .dark-toggle {
+      position: absolute;
+      top: 15px;
+      right: 25px;
+      background: var(--card-bg);
+      border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Dark Mode Toggle -->
+<button class="dark-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
+<h1>
+  The Effects of Community Health Worker Visits and Primary Care Subsidies on Health Behavior and Health Outcomes for Children in Urban Mali 2014
+</h1>
+
+<div class="container">
+  <h2 class="text-center mb-4">🎯 Predict Diarrhea Risk</h2>
+
+  <form action="/predict" method="POST">
+    {% for field in [
+      ['OOccupier', 'Occupier Type', [['1','Main House Owner'], ['0','Not House Owner']], '1 = Owner, 0 = Other'],
+      ['OldFA', 'OldFA', None, 'Visits under the old health program (e.g., 0, 1, 2...)'],
+      ['ageyear_2014', 'Age (2014)', None, 'Child’s age in years during 2014'],
+      ['vaccine_card_available', 'Vaccine Card Available', [['1','Yes'], ['0','No']], '1 = Yes, 0 = No'],
+      ['child_weighing_type_', 'Child Weighing Type', [['1','Clinic'], ['0','Other']], '1 = In clinic, 0 = Otherwise'],
+      ['Changed_water_source', 'Changed Water Source', [['1','Yes'], ['0','No']], '1 = Yes, 0 = No'],
+      ['Aquatabs_used', 'Aquatabs Used', [['1','Yes'], ['0','No']], '1 = Yes, 0 = No'],
+      ['ORT_recipe', 'ORT Recipe Known', [['1','Yes'], ['0','No']], '1 = Knows recipe, 0 = Doesn’t'],
+      ['mosquito_net_correct', 'Mosquito Net Used Correctly', [['1','Yes'], ['0','No']], '1 = Proper use, 0 = Improper or no use'],
+      ['ORT_ingr_correct', 'ORT Ingredients Known', [['1','Yes'], ['0','No']], '1 = Knows correct ingredients, 0 = Doesn’t']
+    ] %}
+    <div class="mb-3">
+      <label for="{{ field[0] }}" class="form-label">{{ field[1] }}</label>
+      {% if field[2] %}
+        <select class="form-select" name="{{ field[0] }}" required>
+          <option value="" disabled selected>Select...</option>
+          {% for val, text in field[2] %}
+            <option value="{{ val }}">{{ text }}</option>
+          {% endfor %}
+        </select>
+      {% else %}
+        <input type="number" step="any" min="0" class="form-control" name="{{ field[0] }}" required>
+      {% endif %}
+      <div class="form-text">{{ field[3] }}</div>
+    </div>
+    {% endfor %}
+
+    <div class="d-flex justify-content-between mt-4">
+      <input class="btn btn-warning w-50 me-2" type="submit" value="Predict">
+      <input class="btn btn-secondary w-50" type="reset" value="Clear">
+    </div>
+  </form>
+
+  {% if prediction_label %}
+    <div class="result mt-4" style="color: {% if prediction_label == 'High Risk' %} red {% else %} green {% endif %};">
+      Prediction: {{ prediction_label }}
+    </div>
+
+    <div class="confidence">
+      Confidence Score: {{ confidence_score }}%
+    </div>
+
+    <div class="progress mt-2">
+      <div class="progress-bar {% if confidence_score > 75 %}bg-danger{% elif confidence_score > 50 %}bg-warning{% else %}bg-success{% endif %}" role="progressbar" style="width: {{ confidence_score }}%;">
+        {{ confidence_score }}%
+      </div>
+    </div>
+  {% else %}
+    <div class="result">No prediction made yet.</div>
+  {% endif %}
+
+  {% if error %}
+    <div class="error">Error: {{ error }}</div>
+  {% endif %}
+</div>
+
+<!-- Dark mode script -->
+<script>
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const toggleBtn = document.querySelector('.dark-toggle');
+    toggleBtn.textContent = document.body.classList.contains('dark-mode') ? "☀️ Light Mode" : "🌙 Dark Mode";
+  }
+</script>
+
+</body>
+</html>
