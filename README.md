@@ -6,7 +6,7 @@ This project is a **Flask-based web application** that uses a trained machine le
 
 The application allows users to input various child and household health details and get a **prediction of diarrhea risk (High/Low)** along with a **confidence score**. The model was trained using **XGBoost** and **RFE (Recursive Feature Elimination)** to select the most relevant features.
 
-![Screenshot](static/background/screenshot.png)
+<img width="1892" height="962" alt="Image" src="https://github.com/user-attachments/assets/f5cc8d20-7161-4a35-8930-85a133b002e2" />
 
 ---
 
